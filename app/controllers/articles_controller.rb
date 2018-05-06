@@ -1,5 +1,8 @@
 class ArticlesController < ApplicationController
     
+    #Must authenticate unless viewing index or show
+    http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+
     #Listing all articles
     def index
         @articles = Article.all
@@ -11,6 +14,11 @@ class ArticlesController < ApplicationController
 
     #defined an action
     def new
+        @article = Article.new
+    end
+
+    def edit
+        @article = Article.find(params[:id])
     end
 
     #When the form is submitted
@@ -18,10 +26,32 @@ class ArticlesController < ApplicationController
         #saves the model to the database
         @article = Article.new(article_params)
  
-        @article.save #returns a bool
-        redirect_to @article
+        if @article.save
+            #A valid article was given
+            redirect_to @article
+          else
+            #Re-render current page
+            render 'new'
+          end
     end
 
+    def update
+        @article = Article.find(params[:id])
+       
+        if @article.update(article_params)
+          redirect_to @article
+        else
+          render 'edit'
+        end
+    end
+
+    
+    def destroy
+        @article = Article.find(params[:id])
+        @article.destroy
+
+        redirect_to articles_path
+    end
 
     private
         def article_params 
