@@ -1,12 +1,3 @@
 Rails.application.routes.draw do
-  get 'welcome/index'
-
-  #declare standard rest resource
-  resources :articles do
-    #comments are a nested resource within articles
-    resources :comments
-  end
-
-  # maps request to the root to the welcome controller index action to get 'welcome/index'
-  root 'welcome#index'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
