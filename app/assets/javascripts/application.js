@@ -9,9 +9,40 @@
 //
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
-//= require jquery
-//= require bootstrap
+//= require jquery3
+//= require popper
+//= require bootstrap-sprockets
+
+//= require turbolinks
 //= require rails-ujs
 //= require activestorage
-//= require turbolinks
+//= require jquery-ui/widgets/autocomplete
+//= require autocomplete-rails
+//= require filterrific/filterrific-jquery
+
+
 //= require_tree .
+
+//Hook to prevent turbolinks from playing autoplay videos in cache
+;(function () {
+    var each = Array.prototype.forEach
+    var autoplayIds = []
+  
+    document.addEventListener('turbolinks:before-cache', function () {
+      var autoplayElements = document.querySelectorAll('[autoplay]')
+      each.call(autoplayElements, function (element) {
+        if (!element.id) throw 'autoplay elements need an ID attribute'
+        autoplayIds.push(element.id)
+        element.removeAttribute('autoplay')
+      })
+    })
+  
+    document.addEventListener('turbolinks:before-render', function (event) {
+      autoplayIds = autoplayIds.reduce(function (ids, id) {
+        var autoplay = event.data.newBody.querySelector('#' + id)
+        if (autoplay) autoplay.setAttribute('autoplay', true)
+        else ids.push(id)
+        return ids
+      }, [])
+    })
+  })()

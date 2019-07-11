@@ -1,13 +1,26 @@
 <footer class="footer">
-  <small>
-    The <a href="https://www.railstutorial.org/">Ruby on Rails Tutorial</a>
-    by <a href="http://www.michaelhartl.com/">Michael Hartl</a>
+  <small>A website by
+    <a href="https://github.com/hygzhu">hygzhu</a>
+
+  <a href="https://discord.gg/AzwwAkx" ><img id="discord" src="https://discordapp.com/assets/e4923594e694a21542a489471ecffa50.svg" alt="Discord Link">
+</a>
+  
   </small>
   <nav>
     <ul>
+      
       <li><%= link_to "About",   about_path %></li>
       <li><%= link_to "Contact", contact_path %></li>
-      <li><a href="http://news.railstutorial.org/">News</a></li>
+      <li><%= link_to "Help", help_path %></li>
+      <% if logged_in? && current_user.activated? %>
+      <li class="text-success"> 
+      <%= "Currently Logged in as: " +current_user.name %>
+      <% if admin_user? %>
+       (Admin)
+      <% end %>
+      </li>
+      <% end %>
     </ul>
-  </nav>
+
+    </nav>
 </footer>
